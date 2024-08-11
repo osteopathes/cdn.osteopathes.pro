@@ -12,6 +12,7 @@ all: clean-all
 	mkdir dist
 	cp -r styleguide dist/
 	cp -r assets dist/
+	cp -r games dist/
 
 .PHONY: clean-all
 clean-all:
