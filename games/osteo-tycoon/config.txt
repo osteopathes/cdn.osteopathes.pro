@@ -1,0 +1,1403 @@
+Let's make a game!
+  name:Ostéo-Tycoon 🦴
+  by:achedeuzot et al.
+  desc:Deviens l'ostéo le plus connu et reconnu au monde !<//>Traites des patients, atteins les sommets et transcendes la profession !<//><q>Toute ressemblance avec des faits et des personnages existants ou ayant existé serait purement fortuite et ne pourrait être que le fruit d’une pure coïncidence.</q>
+  created:11/05/2024
+  updated:26/08/2024
+  version:2
+
+Settings
+  background:https://cdn.osteopathes.pro/games/osteo-tycoon/hands_background_softer.png
+  building cost increase:115%
+  building cost refund:50%
+  spritesheet:core, 48 by 48, https://cdn.osteopathes.pro/games/osteo-tycoon/01_core_osteo_tycoon_sprites.png
+  spritesheet:layers, 48 by 48, https://cdn.osteopathes.pro/games/osteo-tycoon/02_layers_osteo_tycoon_sprites.png
+  spritesheet:buildings, 48 by 48, https://cdn.osteopathes.pro/games/osteo-tycoon/03_buildings_osteo_tycoon_sprites.png
+  spritesheet:upgrades, 48 by 48, https://cdn.osteopathes.pro/games/osteo-tycoon/04_upgrades_osteo_tycoon_sprites.png
+  stylesheet:https://deploy-preview-10--cdn-osteopathes-pro.netlify.app/games/osteo-tycoon/theme_1.css
+
+Layout
+  use default
+
+Buttons
+  *encounterButton
+    name:Effectuer une consultation
+    desc:Clique sur ce patient pour le traiter et gagner du Gold.
+    on click:anim icon wobble
+    on click:yield 1 gold
+    icon:https://cdn.osteopathes.pro/games/osteo-tycoon/patients/patient_with_pain_6.png
+    no text
+    class:bigButton hasFlares
+    icon class:shadowed
+    tooltip origin:bottom
+    tooltip class:red
+
+Resources
+  *gold
+    name:Gold
+    desc:Tu as [?(this=0)|aucun gold|[this] gold]. C'est la monnaie du jeu. Utilise-la à bon escient pour développer ton activité et devenir le magnat de l'ostéopathie!
+    class:noBackground
+    icon:core[0,0]
+    show earned
+
+Buildings
+  *TEMPLATE
+    on click:anim glow
+
+
+  *collaboration|collaborations
+    name:Collaboration|Collaborations
+    desc:Un·e ostéo de plus dans ton cabinet ! Pas besoin de contrat, on est entre collègues 😏.<//><b>Effet:</b><.>Effectue 1 consultation toutes les 10 secondes.
+    icon:buildings[0,0]
+    cost:15 gold
+    on tick:yield 0.1 gold
+
+    tag:living encounter
+    unlocked
+
+
+  *cabinet|cabinets
+    name:Cabinet|Cabinets
+    desc:Qui dit nouveau local, dit nouvelle vitrine pour améliorer ta visibilité et ta renommée.<//><b>Effet:</b><.>Effectue 1 consultation toutes les secondes.
+    icon:buildings[1,0]
+    cost:100 gold
+    on tick:yield 1 gold
+    req:100 gold:earned
+    tag:dead encounter
+
+
+  *livre|livres
+    name:Livre|Livres
+    desc:Quoi de mieux pour la postérité? Encore faut-il avoir des choses intelligentes à dire...<//><b>Effet:</b><.>Produit 8 gold toutes les secondes.
+    icon:buildings[2,0]
+    cost:1100 gold
+    on tick:yield 8 gold
+    req:1100 gold:earned
+    tag:dead
+
+
+  *partenariat|partenariats
+    name:Partenariat|Partenariats
+    desc:Construis ton réseau local: entreprises, artisans, associations, clubs privés, ... Il faut savoir se différencier.<//><b>Effet:</b><.>Produit 47 gold toutes les secondes.
+    icon:buildings[3,0]
+    cost:12000 gold
+    on tick:yield 47 gold
+    req:12000 gold:earned
+    tag:dead
+
+
+  *formation|formations
+    name:Formation|Formations
+    desc:Partage ton savoir et ton approche UNIK®️. Formation QUALIPIO™️, remboursée PIPFL©️, on peut y aller les yeux fermés !<//><b>Effet:</b><.>Produit 260 gold par seconde.
+    icon:buildings[4,0]
+    cost:130000 gold
+    on tick:yield 260 gold
+    req:130000 gold:earned and formationUnlock
+    tag:dead
+
+
+  *ecole|ecoles
+    name:École|Écoles
+    desc:Former la prochaine génération d'ostéopathes, c'est émouvant! Et difficile de dire non à 30% de marge nette.<//><b>Effet:</b><.>Produit 1,400 gold par seconde.
+    icon:buildings[5,0]
+    cost:1400000 gold
+    on tick:yield 1400 gold
+    req:1400000 gold:earned and 2 formations
+    tag:dead encounter
+
+
+  *centre|centres
+    name:Centre de Santé Intégrative|Centres de Santé Intégrative
+    desc:Micronutrition, Yoga, Méditation... comme un hopital mais en mieux, surtout pour ton portefeuille. Réservé aux CSP+.<//><b>Effet:</b><.>Produit 7,800 gold par seconde.
+    icon:buildings[0,1]
+    cost:20000000 gold
+    on tick:yield 7800 gold
+    req:20000000 gold:earned
+    tag:dead encounter
+
+
+  *gadget|gadgets
+    name:Gadget santé|Gadgets santé
+    desc:Une nouvelle ligne de produits "santé" inventée par tes soins: t-shirt auto-grandissant, coussin postural, matelas stimulant, bracelet rééquilibrant, crème régénérante,... Enfin non, pas vraiment, ça vient direct d'EliAxpress', mais chuuut 🤫.<//><b>Effet:</b><.>Produit 44,000 gold par seconde.
+    icon:buildings[1,1]
+    cost:330000000 gold
+    on tick:yield 44000 gold
+    req:330000000 gold:earned
+    tag:dead
+
+
+  *application|applications
+    name:Appli|Applis
+    desc:Ton appli style Huber™ pour prendre 30% de commission sur... tout. En plus, tu peux récolter des données sur le monde entier et les revendre au plus offrant!<//><b>Effet:</b><.>Produit 260,000 gold par seconde.
+    icon:buildings[2,1]
+    cost:5100000000 gold
+    on tick:yield 260000 gold
+    req:5100000000 gold:earned
+    tag:dead
+
+
+  *robot|robots
+    name:Robot ostéo|Robots ostéo
+    desc:Un savant mélange d'ingéniérie et d'IA 🤖 pour proposer de l'ostéo à n'importe quel moment et n'importe où sur la planète. Fait aussi du porte à porte et propose automatiquement des pack de 10 consultations.<//><b>Effet:</b><.>Produit 1,6M gold par seconde.
+    icon:buildings[3,1]
+    cost:75000000000 gold
+    on tick:yield 1600000 gold
+    req:75000000000 gold:earned
+    tag:dead encounter
+
+
+  *timemachine|timemachines
+    name:Machine temporelle|Machines temporelle
+    desc:Envoie des robots ostéopathes dans le passé ⏳, les Terminators de l'ostéopathie. <i>«I'll be adjusting your back.»</i><//><b>Effet:</b><.>Produit 10M gold par seconde.
+    icon:buildings[4,1]
+    cost:1000000000000 gold
+    on tick:yield 10000000 gold
+    req:1000000000000 gold:earned
+    tag:dead encounter
+
+
+
+Upgrades
+  *TEMPLATE
+    on click:anim glow
+
+
+  *collabUpgrades0
+    name:Roi de la négo
+    desc:Tu as écouté un podcast de Oussama: tes collaborations te reversent maintenant 30% de leur CA en plus.<//><q>C'est une offre exceptionnelle le temps que tu te fasses la main!</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[0,0] buildings[0,0]
+    cost:100 gold
+    req:1 collaboration
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades1
+    name:Entretien annuel de performance
+    desc:Mets en place un entretien annuel de performance pour tes collaborateurs et collaboratrices. C'est l'occasion de leur rappeler qu'ils sont remplaçables.<//><q>Si t'es pas motivé, j'ai 100 CV qui attendent dans ma boite mail...</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[1,0] buildings[0,0]
+    cost:500 gold
+    req:1 collaboration
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades2
+    name:Formule all inclusive
+    desc:Tes cabinets sont le top du top des cabinets. En échange, tes collaborations te reversent maintenant 100% de leur CA.<//><q>C'est abusé? T'as qu'à faire mieux !</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[2,0] buildings[0,0]
+    cost:10000 gold
+    req:10 collaboration
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades3
+    name:Clause de non-concurrence
+    desc:Tes collaborateurs et collaboratrices ne peuvent pas travailler pour un autre ostéo.<//><q>Tant qu'ils/elles ne sont pas au courant...</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[3,0] buildings[0,0]
+    cost:100000 gold
+    req:25 collaborations
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades4
+    name:Double casquette
+    desc:Tes collaborateurs et collaboratrices passent leur temps à démarcher de nouveaux patients. C'est super relou, mais ça rapporte.<//><q>Allo, vous connaissez l'ostéopathie ?</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[4,0] buildings[0,0]
+    cost:10000000 gold
+    req:50 collaborations
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades5
+    name:Formation à ta méthode UNIK™️
+    desc:Seuls tes collaborateurs peuvent proposer la méthode créé par tes soins. Mais il faut être formé et payer son adhésion annuelle.<q>Faites-vous partie de l'annuaire des thérapeutes UNIK™️ ?</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[5,0] buildings[0,0]
+    cost:100000000 gold
+    req:100 collaborations and 1 formation
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades6
+    name:Passage en mode industriel
+    desc:Tu as mis en place un processus de production en série pour tes consultations.<//><q>On pourrait dire que je suis comme le M. Ford de l'ostéopathie...</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[6,0] buildings[0,0]
+    cost:1000000000 gold
+    req:150 collaborations
+    passive:multiply yield of collaborations by 2
+
+
+  *collabUpgrades7
+    name:Monopol-ostéo
+    desc:Tu emploies 99% des ostéopathes du marché.<//><q>On leur propose un contrat directement en dernière année.</q><//><b>Effet:</b><.>Chaque consultation effectuée par tes collaborations fait x2 de revenus.
+    icon:layers[7,0] buildings[0,0]
+    cost:10000000000 gold
+    req:200 collaborations
+    passive:multiply yield of collaborations by 2
+
+
+  *collabComboUpgrades0
+    name:Directeurs·trices de cabinet
+    desc:Tes collaborateurs·trices gèrent tes cabinets pour toi.<//><q>Je ne sais pas ce que je ferais sans eux. Je serais sûrement en train de travailler...</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes cabinets font +1% de GpS (Gold par seconde) par collaborateur.
+    icon:layers[0,0] core[2,0]
+    cost:55000 gold
+    req:1 collaboration and 15 cabinets
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of cabinets by (0.01 * gold:ps * collaborations)
+
+
+  *collabComboUpgrades1
+    name:Public conquis
+    desc:Tes collaborateurs·trices sont ta propre armée de fans.<//><q>Ce qu'il dit est si intelligent, si profond, si... génial 😍.</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes livres font +1% de GpS (Gold par seconde) par 2 collaborateurs.
+    icon:layers[1,0] core[2,0]
+    cost:600000 gold
+    req:1 collaboration and 15 livres
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of livres by (0.01 * gold:ps * collaborations / 2)
+
+
+  *collabComboUpgrades2
+    name:Business developpeurs·euses
+    desc:Quand ils ne sont pas occupés dans tes cabinets, ils sont occupés à faire tourner ton business.<//><q>On a des idées, on a des projets, on a des... on a des trucs à faire.</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes partenariats font +1% de GpS (Gold par seconde) par 3 collaborateurs.
+    icon:layers[2,0] core[2,0]
+    cost:6500000 gold
+    req:1 collaboration and 15 partenariats
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of partenariats by (0.01 * gold:ps * collaborations / 3)
+
+
+  *collabComboUpgrades3
+    name:Mini-moi
+    desc:Tes collaborateurs·trices sont des copies conformes de toi-même.<//><q>Je ne sais pas si c'est un compliment ou une insulte...</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes formations font +1% de GpS (Gold par seconde) par 4 collaborateurs.
+    icon:layers[3,0] core[2,0]
+    cost:70000000 gold
+    req:1 collaboration and 15 formations
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of formations by (0.01 * gold:ps * collaborations / 4)
+
+
+  *collabComboUpgrades4
+    name:Assistant·e·s stagiaires
+    desc:Tes collaborateurs·trices enseignent maintenant dans tes écoles. Pas besoin de compétences ou de qualifications particulières, il suffit d'être volontaire.<//><q>Je suis là pour... euh... je suis là.</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes ecoles font +1% de GpS (Gold par seconde) par 5 collaborateurs.
+    icon:layers[4,0] core[2,0]
+    cost:1000000000 gold
+    req:1 collaboration and 15 ecoles
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of ecoles by (0.01 * gold:ps * collaborations / 5)
+
+
+  *collabComboUpgrades5
+    name:Mutuelle d'entreprise
+    desc:Tes collaborateurs·trices ont des réductions pour être soigné·e·s dans tes centres.<//><q>Vous avez essayé le scan d'aura ? Peut-être qu'il faudrait jeter un œil de ce côté là.</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes centres font +1% de GpS (Gold par seconde) par 6 collaborateurs.
+    icon:layers[5,0] core[2,0]
+    cost:16500000000 gold
+    req:1 collaboration and 15 centres
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of centres by (0.01 * gold:ps * collaborations / 6)
+
+
+  *collabComboUpgrades6
+    name:Beta-testeurs·trices
+    desc:Fais tester tes gadgets avant de les commercialiser, pour éviter les ratés.<//><q>Vous voulez nous faire essayer quoi ?!?</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes gadgets font +1% de GpS (Gold par seconde) par 7 collaborateurs.
+    icon:layers[6,0] core[2,0]
+    cost:255000000000 gold
+    req:1 collaboration and 15 gadgets
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of gadgets by (0.01 * gold:ps * collaborations / 7)
+
+
+  *collabComboUpgrades7
+    name:GigaDonnées
+    desc:Tes collaborateurs·trices passent 1h par jour à analyser les données générées par tes applications pour trouver la prochaine idée révolutionnaire.<//><q>Interdit par le RGPD? Il faut le consentement? C'est quoi?</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes applications font +1% de GpS (Gold par seconde) par 8 collaborateurs.
+    icon:layers[7,0] core[2,0]
+    cost:3750000000000 gold
+    req:1 collaboration and 15 applications
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of applications by (0.01 * gold:ps * collaborations / 8)
+
+
+  *collabComboUpgrades8
+    name:Mécanicien du corps et de l'esprit
+    desc:Tous ces robots demandent de l'entretien, et tes collaborateurs·trices sont là pour ça.<//><q>C'est la disjoncteur de sécurité qui a sauté. On va vous remettre ça en un rien de temps.</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes robots font +1% de GpS (Gold par seconde) par 9 collaborateurs.
+    icon:layers[8,0] core[2,0]
+    cost:50000000000000 gold
+    req:1 collaboration and 15 robots
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of robots by (0.01 * gold:ps * collaborations / 9)
+
+
+  *collabComboUpgrades9
+    name:Scribes du temps
+    desc:Avec tous ces voyages dans le temps, il faut bien quelqu'un pour noter ce qui se passe.<//><q>En 2525, c'est la grande guerre entre les thérapeutes manuels pour savoir qui a raison. Ensuite en 2670, c'est la mise de l'EBP dans la constitution. Ou c'était avant ?</q><//><b>Effet:</b><.>Tes collaborations génèrent x2 gold et tes timemachines font +1% de GpS (Gold par seconde) par 10 collaborateurs.
+    icon:layers[8,0] core[2,0]
+    cost:700000000000000 gold
+    req:1 collaboration and 15 timemachines
+    passive:multiply yield of collaborations by 2
+    passive:increase gold yield of timemachines by (0.01 * gold:ps * collaborations / 10)
+
+
+  *cabinetUpgrades0
+    name:Refaire la déco
+    desc:T'as la carte gold de chez Leroi Merlu™️<q>*toc toc* C'est un mur porteur ça ? Aller, ça dégage !</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu
+    icon:layers[0,0] buildings[1,0]
+    cost:1000 gold
+    req:1 cabinet
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades1
+    name:Drive
+    desc:Si McDinalds®️ le fait, pourquoi pas toi ?<//><q>Et vous voulez des frites avec votre manip' ?</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[1,0] buildings[1,0]
+    cost:5000 gold
+    req:5 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades2
+    name:Maillage territorial
+    desc:Un cabinet à moins de 15 minutes de chaque habitant·e.<//><q>Et vous avez la carte de fidélité ?</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[2,0] buildings[1,0]
+    cost:50000 gold
+    req:25 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades3
+    name:Désert médical
+    desc:S'installer dans les déserts, ça fait de toi une oasis 🌴.<//><q>Vous avez été aux urgences ? Non... Dommage, parce que je vais pas pouvoir faire grand chose pour votre hémorragie là... D'ailleurs faudrait pas trop trainer.</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[3,0] buildings[1,0]
+    cost:5000000 gold
+    req:50 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades4
+    name:Formule séjour
+    desc:Pourquoi faire une consultation quand on peut faire une semaine avec ostéo-aquatique-jacuzzi, bar à jus détox et conseils personnalisés ?<//><q>Je suis là pour vous enlever tous vos soucis.</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[4,0] buildings[1,0]
+    cost:500000000 gold
+    req:100 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades5
+    name:Ouverture 24/7/365
+    desc:Tes cabinets sont ouverts 24/7, pour les "urgences" et les insomniaques.<i>Bonus: ça les rend encore plus visibles.</i><//><q>Ils éteignent jamais leurs néons là ?...</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[5,0] buildings[1,0]
+    cost:50000000000 gold
+    req:150 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades6
+    name:Ostéo-Link™️
+    desc:Des cabinets placés en orbite accessibles même des lieux les plus reculés. Melon Tusk n'a qu'à bien se tenir !<//><q>Let's make osteopathy great again !</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[6,0] buildings[1,0]
+    cost:50000000000000 gold
+    req:200 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *cabinetUpgrades7
+    name:Local quantique
+    desc:Un cabinet qui se trouve partout et nulle part à la fois. Les patients viennent te consulter sans même savoir pourquoi.<//><q>On m'a dit de venir pour un bilan tous les 3 mois...</q><//><b>Effet:</b><.>Les consultation effectuée dans tes cabinets font x2 de revenu.
+    icon:layers[7,0] buildings[1,0]
+    cost:50000000000000000 gold
+    req:250 cabinets
+    passive:multiply yield of cabinets by 2
+
+
+  *livreUpgrades0
+    name:Revue de 'littérature'
+    desc:Synthétiser tous les grimoires ostéopathiques en un seul livre, il fallait le faire !<//><q>PubMed ? C'est quoi ?</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[0,0] buildings[2,0]
+    cost:11000 gold
+    req:1 livre
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades1
+    name:Critiques constructives
+    desc:Ton livre est encensé par les plus grands noms de l'ostéopathie.<//><q>Édifiant ! – M. Crochet<q><//><q>Remarquable ! – Téléromo</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[1,0] buildings[2,0]
+    cost:55000 gold
+    req:5 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades2
+    name:Best-seller
+    desc:<i>L'importance du neutre dans la perception du still-point ou la métaphysique du calme intérieur</i> est un best-seller et un succès immédiat.<//><q>Vous savez, je suis un chercheur au fond... un chercheur de vérités universelles.</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[2,0] buildings[2,0]
+    cost:550000 gold
+    req:25 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades3
+    name:Where is Bryan ?
+    desc:Tes livres sont traduits en anglais, c'est ce que Still aurait voulu.<//><q>*Add to cart* intensifies<q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[3,0] buildings[2,0]
+    cost:55000000 gold
+    req:50 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades4
+    name:Adaptation en série
+    desc:Ton livre est adapté en série de super-héros sur Fletnix. Ton personnage est joué par Bérénice Cucumber Snatch.<//><q>You're talking to me ? – De Miro</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[4,0] buildings[2,0]
+    cost:5500000000 gold
+    req:100 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades5
+    name:Ostéo-Land™️
+    desc:Un parc à thème où tout est possible: le bateau-pirate de la grande marrée, le grand-huit du lemniscate postural, le train fantôme des techniques ostéo-articulaires cervicales, le tunnel de la palpation transgénérationnelle...<//><q>Une activité pour toute la famille !</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[5,0] buildings[2,0]
+    cost:550000000000 gold
+    req:150 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades6
+    name:Assistant IA
+    desc:C'est ton IA qui écrit tes livres à ta place. Même pour les idées, c'est elle qui les trouve toute seule.<//><q>Prochain thème suggéré: Ostéopathie fluidique tissulaire de niveau 3.</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[6,0] buildings[2,0]
+    cost:550000000000000 gold
+    req:200 livres
+    passive:multiply yield of livres by 2
+
+
+  *livreUpgrades7
+    name:Informations éternelles
+    desc:Tes ouvrages sont gravés sur des plaques de titane et envoyés dans l'espace. Il est désormais accessible à tous les êtres de l'univers.<//><q>Ce serait dommage de perdre toutes ces connaissances si précieuses...</q><//><b>Effet:</b><.>Revenu par livre x2
+    icon:layers[7,0] buildings[2,0]
+    cost:550000000000000000 gold
+    req:250 livres
+    passive:multiply yield of livres by 2
+
+
+  *partUpgrades0
+    name:Hockey subaquatique
+    desc:Partenariat exclusif avec le club de hockey subaquatique. Les sportifs·ves viennent aussi te voir pour améliorer leurs performances.<//><q>Je joue mieux à chaque fois que vous me débloquez le dos !</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[0,0] buildings[3,0]
+    cost:120000 gold
+    req:1 partenariat
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades1
+    name:Rotary club
+    desc:Partenaire officiel du rotary club, idéal pour développer ton réseau.<//><q>Il a le bras long dans le gateau !</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[1,0] buildings[3,0]
+    cost:600000 gold
+    req:5 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades2
+    name:Ostéopathe du Travail™️
+    desc:Tu es là lorsque le médecin du travail est absent. C'est presque pareil au fond non ?.<//><q>Ah non je ne peux pas vous faire d'arrêt de travail...</><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[2,0] buildings[3,0]
+    cost:6000000 gold
+    req:25 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades3
+    name:Ostéo de l'espace
+    desc:Grâce à ton réseau, tu as réussi à convaincre la NAZA de proposer de l'ostéo sur l'ISS.<//><q>L'apesanteur ça change toute la tenségrité du corps!</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[3,0] buildings[3,0]
+    cost:600000000 gold
+    req:50 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades4
+    name:Évangéliste ostéopathique
+    desc:<q>Il faut apporter l'ostéo à celles et ceux qui ne connaissent pas encore.</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[4,0] buildings[3,0]
+    cost:60000000000 gold
+    req:100 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades5
+    name:Ostéo-Mutuelle
+    desc:Ta propre mutuelle qui ne rembourse que l'ostéo et rien d'autre.<//><q>Il n'y a besoin de rien d'autre pour être en bonne santé !</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[5,0] buildings[3,0]
+    cost:6000000000000 gold
+    req:150 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades6
+    name:La consultation GOLD
+    desc:Nouveau partenariat avec LMVH: pour tout achat d'un article, une consultation GOLD offerte.<//><q>Existe aussi en formule WonderBox pour offrir!</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[6,0] buildings[3,0]
+    cost:6000000000000000 gold
+    req:200 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *partUpgrades7
+    name:Les casques ostéo
+    desc:Ta propre organisation humanitaire pour intervenir en zones de conflit. Un vrai héros.<//><q>Vite, une CV4 pour réanimer ce monsieur !</q><//><b>Effet:</b><.>Revenu par partenariat x2
+    icon:layers[7,0] buildings[3,0]
+    cost:6000000000000000000 gold
+    req:250 partenariats
+    passive:multiply yield of partenariats by 2
+
+
+  *formationUnlock
+    name:Lance ta première formation
+    desc:C'est sympa de s'entendre parler et d'être payé pour ça.<//><q>Et si vous faites comme moi, je vous garantis 100% de résultats cliniques!</q><//><b>Effet:</b><.>Permet de donner des formations.
+    icon:buildings[4,0]
+    cost:1000000 gold
+    req:1000000 gold:earned
+
+
+  *formaUpgrades1
+    name:Méthode UNIK™️
+    desc:Une approche qui te ressemble. Fruit de 300 ans d'expérience clinique.<//><q>Le zona ? Facile, il suffit d'étudier l'anatomie et on comprend tout !</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[0,0] buildings[4,0]
+    cost:1300000 gold
+    req:1 formation
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades2
+    name:Boosteur d'activité
+    desc:Ta formation en marketing pour pouvoir remplir son agenda<//><q><i>Les cartes de visites, c'est dépassé. C'est une question de mindset... Tout le monde peut réussir avec ma méthode.</i></q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[1,0] buildings[4,0]
+    cost:6500000 gold
+    req:5 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades3
+    name:Posturo-bébé-tissulaire
+    desc:Le parfait mélange pour soigner les maux du corps et de l'âme, sur plusieurs générations.<//><q>Vas-y, poses tes mains. Attends, ressens. Tu vois, la cellule te dit *oui*...</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[2,0] buildings[4,0]
+    cost:65000000 gold
+    req:25 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades4
+    name:Ostéo animalier
+    desc:Un humain c'est un animal, c'est pas si différent.<//><q>Sur une tortue, tu te mets en écoute sur la carapace comme si c'était un crâne. Pas compliqué.</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[3,0] buildings[4,0]
+    cost:6500000000 gold
+    req:50 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades5
+    name:Coach
+    desc:Transcendes ta condition de thérapeute et deviens... un mentor, un guide, un coach de vie.<//><q>Je ne suis pas là pour vous soigner, je suis là pour vous aider à vous soigner vous-même.</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[4,0] buildings[4,0]
+    cost:650000000000 gold
+    req:100 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades6
+    name:Placements financiers
+    desc:Pourquoi s'arrêter au soin ? Proposes tes conseils en placements pour atteindre l'opulence financière.<//><q>Vous avez entendu parlé de crypto? Sinon je peux vous proposer un petit montage immobilier à 16% par an. Non aucun risque.</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[5,0] buildings[4,0]
+    cost:65000000000000 gold
+    req:150 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades7
+    name:Ostéo-quantique
+    desc:La médecine quantique, c'est l'avenir. Une formation de 15 minutes pour apprendre à soigner n'importe qui n'importe où dans l'Univers en envoyant des ondes d'amour débordant.<//><q>La connexion spiritielle directe vous sera facturée 0,34€/minutes après le bip.</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[6,0] buildings[4,0]
+    cost:65000000000000000 gold
+    req:200 formations
+    passive:multiply yield of formations by 2
+
+
+  *formaUpgrades8
+    name:Savoir utiliser PubMed
+    desc:Tu as enfin compris la valeur de PubMed et de la recherche, c'est un grand pas en avant.<//><q>J'ai lu une étude qui allait dans mon sens, c'est que j'ai raison, non ?</q><//><b>Effet:</b><.>Chaque formation produit x2 de revenus.
+    icon:layers[7,0] buildings[4,0]
+    cost:65000000000000000000 gold
+    req:250 formations
+    passive:multiply yield of formations by 2
+
+
+  *ecoleUpgrades0
+    name:Extension de surface
+    desc:Agrandir l'école pour accueillir plus d'étudiants et d'étudiantes.<//><q>Avec notre nouvelle capacité de 1000 étudiant·e·s et des salles dernier cri, personne ne pensera aux débouchés.</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[0,0] buildings[5,0]
+    cost:200000000 gold
+    req:1 ecole
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades1
+    name:Bâtiment clinique
+    desc:Une clinique pour toucher plus de monde et permettre aux étudiant·e·s de mettre en pratique.<//><q>T'as trouvé une chaîne dysfonctionnelle entre la cheville et la tente du cervelet ? Parfait, tu peux traiter.</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[1,0] buildings[5,0]
+    cost:1000000000 gold
+    req:5 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades2
+    name:Laboratoire de recherche
+    desc:Un laboratoire pour faire avancer la science et la recherche en ostéopathie.<//><q>Notre étude porte sur l'effet du toucher léger sur l'élasticité des fascias plantaires.</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[2,0] buildings[5,0]
+    cost:10000000000 gold
+    req:25 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades3
+    name:Partenariat universitaire
+    desc:Faire de la recherche c'est bien, faire de la recherche comprise par tout le monde c'est mieux.<//><q>Vous n'aviez pas de groupe contrôle ? Ah...</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[3,0] buildings[5,0]
+    cost:1000000000000 gold
+    req:50 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades4
+    name:Doctorant·e·s
+    desc:Des doctorant·e·s, nécessaires pour faire rayonner tes écoles et développer des traitements fiables et efficaces.<//><q>Vous pourriez prendre 20h de clinique et 7h de cours en plus de votre doctorat ? Ça nous arrangerait.</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[4,0] buildings[5,0]
+    cost:100000000000000 gold
+    req:100 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades5
+    name:Rachat des autres écoles
+    desc:Racheter les groupes concurrents pour devenir le leader incontesté de la formation en ostéopathie. Et pouvoir fixer tes prix.<//><q>Suite à la fusion avec le groupe Nivéatude, nous avons le plaisir d'annoncer notre rachat par le géant de l'investissement BlackPebble.</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[5,0] buildings[5,0]
+    cost:10000000000000000 gold
+    req:150 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades6
+    name:Forums d'orientation
+    desc:Organiser des forums d'orientation et des journées portes ouvertes pour attirer les futur·e·s étudiant·e·s.<//><q>C'est un métier magnifique, un métier passion, et niveau Bac +5 !</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[6,0] buildings[5,0]
+    cost:10000000000000000000 gold
+    req:200 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *ecoleUpgrades7
+    name:Propager des rumeurs
+    desc:Faire courir des rumeurs sur les autres écoles pour attirer les étudiant·e·s chez toi.<//><q>Ils ont perdu l'agrément mais ils n'ont rien dit aux étudiant·e·s, c'est chaud !</q><//><b>Effet:</b><.>Chaque école génère x2 de revenus.
+    icon:layers[7,0] buildings[5,0]
+    cost:10000000000000000000000 gold
+    req:250 ecoles
+    passive:multiply yield of ecoles by 2
+
+
+  *centreUpgrades0
+    name:Salade Tomates Oignons
+    desc:Le nec plus ultra de l'ostéo. Un peu de tout, pour tout le monde.<//><q>Vous avez mal au dos, à la tête, au ventre ? On peut tout traiter !</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[0,0] buildings[0,1]
+    cost:3300000000 gold
+    req:1 centre
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades1
+    name:Interdisciplinarité
+    desc:Un centre où se côtoient ostéopathes, naturopathes, acuponcteurs·trices, sophrologues, réflexologues, homéopathes,...<//><q>On est là pour vous soigner, peu importe la méthode et son efficacité !</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[1,0] buildings[0,1]
+    cost:16500000000 gold
+    req:5 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades2
+    name:J & J
+    desc:On traite tout par le Jeûne et les Jus détox. C'est tendance.<//><q>Vous avez mal au dos ? C'est parce que vous avez trop mangé de gluten, ou de café au lait, ou de broccolis. Et puis un régime ne vous fera pas de mal...</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[2,0] buildings[0,1]
+    cost:165000000000 gold
+    req:25 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades3
+    name:Vibrothérapie
+    desc:Les centres proposent maintenant des soins par les vibrations vocales et instrumentales: «Découvrez le pouvoir des ondes sur le corps et l'âme» .<//><q>Oooommm... Vous sentez que vous allez déjà mieux ? C'est puissant.</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[3,0] buildings[0,1]
+    cost:16500000000000 gold
+    req:50 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades4
+    name:Relooking santé
+    desc:Parce que la santé peut aussi passer par le look.<//><q>En coupant vos cheveux situés sur des méridiens de médecine chinoise, on va rééquilibrer vos énergies. Mais il faut voir si niveau esthétique on s'y retrouve, donc on égalisera les deux côtés hein. Ça vous ira mieux...</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[4,0] buildings[0,1]
+    cost:1650000000000000 gold
+    req:100 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades5
+    name:Galaxies familiales
+    desc:Proposes des soins sur plusieurs générations, vivantes ou mortes, pour régler les problèmes les plus complexes.<//><q>C'est une pathologie transgénérationnelle familiale: il va falloir traiter le petit dernier, puis l'arrière-arrière-grand-père décédé, puis le perroquet de tatie... C'est un traitement vraiment global.</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[5,0] buildings[0,1]
+    cost:165000000000000000 gold
+    req:150 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades6
+    name:Multiverse
+    desc:Il est temps de traiter la vraie source du problème: il faut s'occuper des problèmes dans les dimensions parallèles!<//><q>J'ai senti que dans une autre dimension vous avez été attaqué par un dragon dans le dos, ça cause des tensions dans vos lombaires. On va rééquilibrer tout ça.</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[6,0] buildings[0,1]
+    cost:165000000000000000000 gold
+    req:200 centres
+    passive:multiply yield of centres by 2
+
+
+  *centreUpgrades7
+    name:Big Bang
+    desc:Le vrai problème c'est le début de tout. Il faut proposer des soins pour les âmes et les corps avant même qu'ils ne soient nés.<//><q>Ces tensions remontent à un traumatisme lors de la création de l'Univers. On va travailler sur ça.</q><//><b>Effet:</b><.>Chaque centre génère x2 de revenus.
+    icon:layers[7,0] buildings[0,1]
+    cost:165000000000000000000000 gold
+    req:250 centres
+    passive:multiply yield of centres by 2
+
+
+  *gadgetUpgrades0
+    name:Palpomètre
+    desc:Un outil pour mesurer la palpation et la force de vos manipulations.<//><q>Vous avez une palpation de 3,5 sur l'échelle de Still. C'est pas mal, mais on peut faire mieux.</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[0,0] buildings[1,1]
+    cost:51000000000 gold
+    req:1 gadget
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades1
+    name:Dys-Scanner
+    desc:Un scanner pour voir les tensions et les dysfonctions dans le corps.<//><q>On ne voit rien sur les images, mais c'est parce que c'est trop subtil. Un jour on pourra les détecter.</q><//><b>EffEffect:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[1,0] buildings[1,1]
+    cost:255000000000 gold
+    req:5 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades2
+    name:Atlas ProFixal
+    desc:Un outil pour réaligner les vertèbres et les articulations en un seul geste et sans effort.<//><q>Un petit clic et c'est réglé. CLIC.</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[2,0] buildings[1,1]
+    cost:2550000000000 gold
+    req:25 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades3
+    name:Laser de guérison
+    desc:Une technologie révolutionnaire par ondes pulsées scalaires basse-fréquence. Seulement 300€/mois.<//><q>On comprend rien mais c'est sûr, avec une technologie pareille, aucune situation clinique ne me résiste !</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[3,0] buildings[1,1]
+    cost:255000000000000 gold
+    req:50 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades4
+    name:Posturo-fix
+    desc:Un vêtement intelligent pour rééquilibrer la posture sans faire d'efforts.<//><q>Il suffit de sortir sa CB pour régler ses soucis. En plus c'est certifié dispositif médical par l'État!</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[4,0] buildings[1,1]
+    cost:25500000000000000 gold
+    req:100 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades5
+    name:Table enrichie en IA
+    desc:Une table qui analyse et propose le traitement le plus adapté.<//><q>*bip boup* Diagnostic: antéversion du sphénoïde *bip boup* Traitement: 3 manipulations HVLA par jour pendant 1 mois.</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[5,0] buildings[1,1]
+    cost:2550000000000000000 gold
+    req:150 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades6
+    name:Huiles essentielles
+    desc:<q>Un peu de lavande pour détendre, un peu de menthe pour rafraîchir, un peu de citron pour purifier... et voilà. À table !</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[6,0] buildings[1,1]
+    cost:25500000000000000000000 gold
+    req:200 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *gadgetUpgrades7
+    name:Pendentifs de guérison
+    desc:Des pendentifs pour soigner à distance et en toute sécurité (vous avez déjà oublié COVID ?).<//><q>Vous sentez la chaleur ? C'est que ça marche. Vous ne sentez rien ? C'est que ça marche aussi.</q><//><b>Effet:</b><.>Chaque gadget génère x2 de revenus.
+    icon:layers[7,0] buildings[1,1]
+    cost:2550000000000000000000000 gold
+    req:250 gadgets
+    passive:multiply yield of gadgets by 2
+
+
+  *applicationUpgrades0
+    name:OstéoBook
+    desc:Le réseau social pour ostéos, mais en mieux.<//><q>Je suis dans un groupe de discussion sur les déclaration 2035, c'est passionnant!</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[0,0] buildings[2,1]
+    cost:750000000000 gold
+    req:1 application
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades1
+    name:OstéoTube
+    desc:La plateforme de vidéos sur l'ostéopathie, exclusivement.<//><q>Génial, une vidéo de 4h sur la palpation du sacrum. C'est parti pour la soirée !</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[1,0] buildings[2,1]
+    cost:3750000000000 gold
+    req:5 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades2
+    name:Vintostéo
+    desc:La plateforme d'échange de patient·e·s d'occasion.<//><q>J'échange 3 lomblagiques contre 2 migraineux·ses.</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[2,0] buildings[2,1]
+    cost:37500000000000 gold
+    req:25 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades3
+    name:OstéoFit
+    desc:L'application pour suivre ses patients et leur proposer des exercices adaptés.<//><q>Vous avez mal au dos ? Faites 3 séries de 10 flexions du tronc. Vous avez mal au genou ? Faites 3 séries de 10 flexions du tronc mais pensez à votre genou.</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[3,0] buildings[2,1]
+    cost:3750000000000000 gold
+    req:50 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades4
+    name:OstéoSearch
+    desc:Le moteur de recherche 100% ostéo.<//><q>Quand on tape 'dysfonction', on ne trouve aucun résultat. C'est normal ?</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[4,0] buildings[2,1]
+    cost:375000000000000000 gold
+    req:100 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades5
+    name:OstéoAds
+    desc:Essentiel pour toucher (😉) plus de monde.<//><q>Vous avez déjà vu une pub pour un ostéo ? C'est moi.</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[5,0] buildings[2,1]
+    cost:37500000000000000000 gold
+    req:150 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades6
+    name:OstéoBnB
+    desc:Convertissez les cabinets en hôtels pour la nuit.<//><q>Vous avez déjà dormi sur une table ? Parfait, je peux vous proposer ma salle pour la nuit.</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[6,0] buildings[2,1]
+    cost:3750000000000000000000 gold
+    req:200 applications
+    passive:multiply yield of applications by 2
+
+
+  *applicationUpgrades7
+    name:OstéoDate
+    desc:L'application de rencontre entre ostéopathes.<//><q>Je ne supporte pas les gens qui me touchent sans intention. C'est vital pour moi.</q><//><b>Effet:</b><.>Chaque application génère x2 de revenus.
+    icon:layers[7,0] buildings[2,1]
+    cost:375000000000000000000000 gold
+    req:250 applications
+    passive:multiply yield of applications by 2
+
+
+  *timemachineUpgrades0
+    name:Glisser l'idée à A.T. Still
+    desc:On veut s'assurer que l'ostéopathie existera bel et bien.<//><q>Dites Dr Still, vous n'auriez pas envie de donner un nom à votre façon de pratiquer? Ou d'écrire quelques ouvrages sur votre œuvre?</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[0,0] buildings[4,1]
+    cost:140000000000000 gold
+    req:1 timemachine
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades1
+    name:Quelles découvertes nous attendent ?
+    desc:Aller dans le futur pour voir les avancées de l'ostéopathie.<//><q>Je peux venir vous observer pratiquer dans votre cabinet ?</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[1,0] buildings[4,1]
+    cost:700000000000000 gold
+    req:5 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades2
+    name:Au temps des dinosaures
+    desc:<//><q>Est-ce que les T-Rex avaient des problèmes de dos? Comment faisaient-ils pour se soigner ?</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[2,0] buildings[4,1]
+    cost:7000000000000000 gold
+    req:25 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades3
+    name:Boucle temporelle
+    desc:Tu peux rejouer la même consultation en boucle pour faire une prise en charge parfaite.<//><q>Sur une échelle de 0 à 100, comment noteriez-vous ma prise en charge aujourd'hui ?<//>80<//>Ok, on va la refaire.<//>*zap* Bienvenue, que puis-je faire pour vous ?</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[3,0] buildings[4,1]
+    cost:70000000000000000 gold
+    req:50 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades4
+    name:Retouche temporelle
+    desc:Modifie le passé pour corriger les problèmes du présent.<//><q>Je vais vous prévenir de faire attention hier et vous éviter l'entorse. *zap* C'est bon, c'est réglé.</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[4,0] buildings[4,1]
+    cost:70000000000000000000 gold
+    req:100 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades5
+    name:Nœud temporel
+    desc:À force de faire des voyages dans le temps, la ligne temporelle est toute embrouillée.<//><q>Ce qui s'est passé, s'est passé. Ou est-ce que je l'ai altéré auparavant ?</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[5,0] buildings[4,1]
+    cost:7000000000000000000000 gold
+    req:150 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades6
+    name:Paradoxe
+    desc:Tu ne sais plus si tu as créé la machine pour voyager dans le temps ou si tu as voyagé dans le temps pour créer la machine.<//><q>Je suis là pour soigner les problèmes de dos, pas pour résoudre des énigmes temporelles.</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[6,0] buildings[4,1]
+    cost:7000000000000000000000000 gold
+    req:200 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timemachineUpgrades7
+    name:Révélations
+    desc:Le temps n'existe pas, c'est simplement une vue de l'esprit. Tout n'est que perception d'un instant où tout est déjà arrivé simultanément.<//><q>Je ne suis pas sûr de comprendre, mais si ça m'aide pour ma lombalgie...</q><//><b>Effet:</b><.>Chaque machine temporelle génère x2 de revenus.
+    icon:layers[7,0] buildings[4,1]
+    cost:7000000000000000000000000000 gold
+    req:250 timemachines
+    passive:multiply yield of timemachines by 2
+
+
+  *timeUpgrades0
+    name:Consultations en 45 minutes
+    desc:<q>On est pas là pour glander !</q>Aucune consultation ne dépasse 45 minutes.<//><b>Effet:</b><.>Chaque consultation effectuée génère +0.1 gold.
+    icon:layers[0,0] upgrades[0,0]
+    cost:55000 gold
+    req:15 collaborations
+    passive:increase gold yield of tag:encounter by 0.1
+    passive:increase yield of encounterButton by 0.1
+
+
+  *timeUpgrades1
+    name:Consultations en 30 minutes
+    desc:<q>On va à l'essentiel: motif, antécédents et ça suffit.</q>Aucune consultation ne dépasse 30 minutes.<//><b>Effet:</b><.>Chaque consultation génère x2 gold.<//><.>Traiter le patient rapporte +5 gold.
+    icon:layers[1,0] upgrades[0,0]
+    cost:600000 gold
+    req:15 cabinets
+    passive:multiply gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 5
+
+
+  *timeUpgrades2
+    name:Consultations en 20 minutes
+    desc:<q>Allongez-vous, on va discuter pendant que je vous examine.</q><//>Aucune consultation ne dépasse 20 minutes.<//><b>Effet:</b><.>Chaque consultation génère x2 gold.<//><.>Traiter le patient rapporte +10 gold.
+    icon:layers[2,0] upgrades[0,0]
+    cost:6500000 gold
+    req:15 livres
+    passive:multiply gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 10
+
+
+  *timeUpgrades3
+    name:Abandonner l'anamnèse
+    desc:<q>Poser des questions? Du temps perdu!<//>De toute façon les tissus savent !</q><//>Aucune consultation ne dépasse 15 minutes.<//><b>Effet:</b><.>Chaque consultation génère x2 gold.<//><.>Traiter le patient rapporte +20 gold.
+    icon:layers[3,0] upgrades[0,0]
+    cost:70000000 gold
+    req:15 partenariats
+    passive:multiply gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 20
+
+
+  *timeUpgrades4
+    name:Un crac et puis s'en va
+    desc:Tes collaborateurs·trices préparent tes patient·e·s sur la table. Tu n'as plus qu'à manipuler et c'est fait. L'efficacité ultime. Tes consultations mettent maximum 5 minutes.<//><q>CRAC! On travaille au décibel ici !</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.<//><.>Traiter le patient rapporte +20 gold.
+    icon:layers[4,0] upgrades[0,0]
+    cost:1000000000 gold
+    req:15 formations
+    passive:multiply gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 20
+
+
+  *timeUpgrades5
+    name:Mediumnité ostéopathique
+    desc:Tu peux traiter tes patient·e·s à distance et quasi-instantanément. Tu n'as plus besoin de les voir, tu les sens dans ton âme.<//><q>Mhhm oui, je sens une tension dans le bas du dos...et voilà, c'est réglé.</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.<//><.>Traiter le patient rapporte +20 gold.
+    icon:layers[4,0] upgrades[0,0]
+    cost:1000000000 gold
+    req:15 ecoles
+    passive:multiply gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 20
+
+
+  *goldUpgrades0
+    name:L'inflation hein...
+    desc:Augmente le tarif de tes consultations pour compenser tes charges.<//><q>Entre l'URSSFA, l'inflation, LibOcto, ...</q><//><b>Effet:</b><.>Chaque consultation génère +0.5 gold.
+    icon:layers[0,0] core[0,0]
+    cost:1000 gold
+    req:1 cabinet
+    passive:increase gold yield of tag:encounter by 0.5
+    passive:increase yield of encounterButton by 0.5
+
+
+  *goldUpgrades1
+    name:L'expérience, ça se paye
+    desc:Tu as de l'expérience, tu as des résultats. Tu augmentes tes tarifs.<//><q>Qui a parlé de se mettre à jour? La satisfaction de mes patients parle d'elle-même.</q><//><b>Effet:</b><.>Chaque consultation génère +1 gold.
+    icon:layers[1,0] core[0,0]
+    cost:10000 gold
+    req:1 livre
+    passive:increase gold yield of tag:encounter by 1
+    passive:increase yield of encounterButton by 1
+
+
+  *goldUpgrades2
+    name:Le prix de la qualité
+    desc:C'est pour la qualité de tes soins.<//><q>Il faut bien pouvoir payer le niveau 7 de ma prochaine formation.</q><//><b>Effet:</b><.>Chaque consultation génère +2 gold.
+    icon:layers[2,0] core[0,0]
+    cost:100000 gold
+    req:1 partenariat
+    passive:increase gold yield of tag:encounter by 2
+    passive:increase yield of encounterButton by 2
+
+
+  *goldUpgrades3
+    name:Il n'y a personne d'autre
+    desc:Tu es le seul ostéo du coin, ce serait dommage de ne pas en profiter.<//><q>Vous faites le paiement en 4x ?</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.
+    icon:layers[3,0] core[0,0]
+    cost:1000000 gold
+    req:1 formation
+    passive:multiply gold yield of tag:encounter by 2
+    passive:multiply yield of encounterButton by 2
+
+
+  *goldUpgrades4
+    name:Pack famille
+    desc:Pour les familles nombreuses, tu fais un tarif de groupe.<//><q>Sinon il y a le pack 10 consultations qui pourrait vous correspondre.</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.
+    icon:layers[4,0] core[0,0]
+    cost:10000000 gold
+    req:1 ecole
+    passive:multiply gold yield of tag:encounter by 2
+    passive:multiply yield of encounterButton by 2
+
+
+  *goldUpgrades5
+    name:Faut-il une raison ?
+    desc:Tu augmentes tes tarifs sans raison apparente. Tu es le·la meilleur·e, c'est tout.<//><q>Je suis le meilleur, c'est normal que je sois le plus cher. Et si je suis le plus cher, c'est que je suis le meilleur.</q><//><b>Effet:</b><.>Chaque consultation génère x3 gold.
+    icon:layers[5,0] core[0,0]
+    cost:100000000 gold
+    req:1 centre
+    passive:multiply gold yield of tag:encounter by 3
+    passive:multiply yield of encounterButton by 3
+
+
+  *goldUpgrades6
+    name:Like a diamond
+    desc:Tu ne prends plus que les paiements en diamants. C'est plus sûr.<//><q>Et puis c'est compliqué à déclarer, alors je ne les déclare pas. Ça simplifie la chose pour tout le monde au final.</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.
+    icon:layers[6,0] core[0,0]
+    cost:1000000000 gold
+    req:1 gadget
+    passive:multiply gold yield of tag:encounter by 2
+    passive:multiply yield of encounterButton by 2
+
+
+  *goldUpgrades7
+    name:Le prix de la santé
+    desc:Tu augmentes tes tarifs pour que les patient·e·s prennent conscience de la valeur de leur santé.<//><q>C'est votre bien le plus précieux, alors c'est important d'y mettre le prix.</q><//><b>Effet:</b><.>Chaque consultation génère x2 gold.
+    icon:layers[7,0] core[0,0]
+    cost:10000000000 gold
+    req:1 application
+    passive:multiply gold yield of tag:encounter by 2
+    passive:multiply yield of encounterButton by 2
+
+
+  *miscUpgrades0
+    name:News-ostéo
+    desc:Tous les influenceurs·ceuses ont une newsletter, pourquoi pas toi?<//><q>Ce mois-ci: la sédentarité pire que la clope ?</q><//><b>Effet:</b><.>Génère 0.1 gold par seconde.
+    icon:upgrades[1,0]
+    cost:50 gold
+
+    unlocked
+    on tick:yield 0.1 gold
+
+
+  *miscUpgrades1
+    name:Assistant formateur
+    desc:Un poste d'assistant dans une école, c'est un bon début pour prendre du galon.<//><q>Je suis là pour vous aider à comprendre ce que le professeur n'a pas compris.</q><//><b>Effet:</b><.>Génère 1 gold par seconde.
+    icon:upgrades[2,0]
+    cost:500 gold
+    req:1000 gold:earned
+    on tick:yield 1 gold
+
+
+  *website
+    name:Site web
+    desc:Pour représenter ton activité et avoir ta propre présence numérique.<//><q>Qui dit ostéo, dit main, et qui dit main, dit doigt, et qui dit doigt, dit digital !</q><//><b>Effet:</b><.>Génère 2 gold par seconde.
+    icon:upgrades[3,0]
+    cost:5000 gold
+    req:10000 gold:earned
+    on tick:yield 2 gold
+
+
+  *miscUpgrades3
+    name:Geeglo Ads
+    desc:Pour être sûr que les gens te choisissent quand ils cherchent un ostéopathe.<//><q>Il faut être là où les gens cherchent, et les gens cherchent sur Geeglo.</q><//><b>Effet:</b><.>Génère 5 gold par seconde.<//><.>Coûte 2 gold par seconde.
+    icon:upgrades[4,0]
+    cost:50000 gold
+    req:100000 gold:earned and website
+    on tick:yield 3 gold
+
+
+  *podcast
+    name:Ostéo-cast
+    desc:Les micros: check. Les invité·e·s: check. Les sujets: check.<//><q>C'est long d'écouter tous ces gens parler...mais on apprend des trucs parfois.</q><//><b>Effet:</b><.>Coûte 5 gold par seconde.<//><.>Tu gagnes en visibilité (aucun effet, pour le moment.).
+    icon:upgrades[5,0]
+    cost:500000 gold
+    req:1000000 gold:earned
+    on tick:yield -5 gold
+
+
+  *miscUpgrades5
+    name:Intragram
+    desc:Réinvente ton image, deviens influenceur·ceuse, c'est ce qu'on appelle le personal branding™️ bébé. Une fois que tu seras connu·e, tu pourras convertir ta <i>brand</i> en <i>gold</i>.<//><q>Bonjour les ostéopathes...!!</q><//><b>Effet:</b><.>Génère 10 gold par seconde.<//><.>Te coûte beaucoup en santé mentale (aucun effet, pour le moment.)
+    icon:upgrades[7,0]
+    cost:5000000 gold
+    req:10000000 gold:earned and podcast
+    on tick:yield 10 gold
+
+
+  *miscUpgrades6
+    name:YouBute
+    desc:Fais plaisir à l'algorithme, fais une tête surprise 😱 sur la miniature.<//><q>Et n'oubliez pas de vous abonner, de liker et de cliquer sur la cloche !</q><//><b>Effet:</b><.>Génère 20 gold par seconde.
+    icon:upgrades[1,1]
+    cost:50000000 gold
+    req:100000000 gold:earned
+    on tick:yield 20 gold
+
+
+  *neuroTraining
+    name:Formation neuro
+    desc:Tu sais correctement gérer les tendinites éléctrisantes du piriforme qui dûrent depuis 20 ans. Et tu sais aussi dans quel cas ne <b>pas</b> tirer sur les nerfs.<//><q>En GANTS et en BOTTES !!!</q><//><b>Effet:</b><.>T'es moins nul·le (aucun effet).
+    icon:upgrades[0,1]
+    cost:500000000 gold
+    req:1000000000 gold:earned
+
+
+  *miscUpgrades8
+    name:Formation vascu
+    desc:Tu sais maintenant identifier des trucs que t'aurais dû apprendre en formation initiale. Oups.<//><q>Le coeur, c'est comme un tissu, mais qui bat 🤯.</q><//><b>Effet:</b><.>T'es un peu moins nul·le (aucun effet)
+    icon:upgrades[8,0]
+    cost:5000000000 gold
+    req:10000000000 gold:earned
+
+
+  *miscUpgrades9
+    name:Formation sur la douleur
+    desc:Tu sais maintenant que la douleur, c'est pas si simple. Et ça, c'est déjà beaucoup.<//><q>Et si j'appuie ici, ça fait mal ?</q><//><b>Effet:</b><.>T'es un peu moins nul·le (aucun effet).
+    icon:upgrades[4,1]
+    cost:50000000000 gold
+    req:100000000000 gold:earned
+
+
+  *miscUpgrades10
+    name:Réseau d'urgences
+    desc:Une plateforme de mise en relation qui prend 30% de commission, ça vaut le coup.<//><q>Je peux vour avoir un ostéo pour dans 20 minutes chez vous, mais ça sera 340€, ça vous va ?</q><//><b>Effet:</b><.>Génère 50 gold par seconde.
+    icon:upgrades[2,1]
+    cost:500000000000 gold
+    req:1000000000000 gold:earned
+    on tick:yield 50 gold
+
+
+  *miscUpgrades11
+    name:Flamingo Meme Factory
+    desc:Dopages, animes, manhua, cas cliniques, tout est bon pour faire des memes, et apprendre 2-3 trucs au passage.<//><q>Notre objectif c'est pas d'être les meilleurs, c'est de prouver que tout le monde est nul.</q><//><b>Effet:</b><.>T'es un peu moins nul·le (aucun effet).<//><.>Tu perds un peu de santé mentale.
+    icon:upgrades[5,1]
+    cost:5000000000000 gold
+    req:10000000000000 gold:earned
+
+
+  *miscUpgrades12
+    name:osteopathes.pro
+    desc:Gêres ton activité comme un·e pro.<//><q>Évidemment qu'on allait être une upgrade 😆!</q><//><b>Effet:</b><.>Génère 100 gold par seconde.
+    icon:upgrades[3,1]
+    cost:50000000000000 gold
+    req:100000000000000 gold:earned
+    on tick:yield 100 gold
+
+
+  *miscUpgrades13
+    name:Banque
+    desc:Et pourquoi ne pas proposer des prêts spécialement aux étudiant·e·s en ostéo ?<//><q>Ici, aucune demande de garantie. On veut juste vous aider à devenir ostéo. Oui, bon, faudra quand même rembourser hein...</q><//><b>Effet:</b><.>Génère 500 gold par seconde.
+    icon:upgrades[6,1]
+    cost:500000000000000 gold
+    req:1000000000000000 gold:earned
+    on tick:yield 500 gold
+
+
+  *miscUpgrades14
+    name:Animateur·trice radio
+    desc:Ton podcast est tellement bien que tu as été contacté pour animer une émission radio.<//><q>Moi en cabinet je laisse faire mon intuition. Souvent je trouve des trucs dingues !</q><//><b>Effet:</b><.>Génère 1 000 gold par seconde.
+    icon:upgrades[7,1]
+    cost:5000000000000000 gold
+    req:10000000000000000 gold:earned
+    on tick:yield 1000 gold
+
+
+  *miscUpgrades15
+    name:Nations Unies
+    desc:Tu as tellement de followers sur Intragram que tu est nommé·e ambassadeur·ceuse de l'ostéopathie auprès des Nations Unies.<//><q>Je suis là pour vous parler de l'ostéopathie, une médecine douce, naturelle et appréciée.</q><//><b>Effet:</b><.>Génère 10 000 gold par seconde.
+    icon:upgrades[8,1]
+    cost:50000000000000000 gold
+    req:100000000000000000 gold:earned
+    on tick:yield 10000 gold
+
+
+
+Achievements
+  *TEMPLATE
+    on click:anim glow
+
+
+  *encounterBtnAchiev0
+    name:Guili guili!
+    desc:Tu as cliqué <b>10</b> fois sur le patient.
+    icon:layers[0,1] core[1,0]
+    req:10 encounterButton:clicks
+
+
+  *encounterBtnAchiev1
+    name:Arrêtez, c'est trop !
+    desc:Tu as cliqué <b>100</b> fois sur le patient.
+    icon:layers[1,1] core[1,0]
+    req:100 encounterButton:clicks
+
+
+  *encounterBtnAchiev2
+    name:Je vais avoir des bleus...
+    desc:Tu as cliqué <b>2000</b> fois sur le patient.
+    icon:layers[2,1] core[1,0]
+    req:2000 encounterButton:clicks
+
+
+  *encounterBtnAchiev3
+    name:Autoclicker ou folie?
+    desc:Tu as cliqué <b>10 000</b> fois sur le patient.
+    icon:layers[3,1] core[1,0]
+    req:10000 encounterButton:clicks
+
+
+  *encounterBtnAchiev4
+    name:Parkinson ?
+    desc:Tu as cliqué <b>100 000</b> fois sur le patient.
+    icon:layers[4,1] core[1,0]
+    req:100000 encounterButton:clicks
+
+
+  *encounterBtnAchiev5
+    name:Inhumain
+    desc:Tu as cliqué <b>1 000 000</b> fois sur le patient.
+    icon:layers[5,1] core[1,0]
+    req:1000000 encounterButton:clicks
+
+
+  *encounterBtnAchiev6
+    name:Divinité
+    desc:Tu as cliqué <b>10 000 000</b> fois sur le patient. DIX MILLIONS DE FOIS !
+    icon:layers[6,1] core[1,0]
+    req:10000000 encounterButton:clicks
+
+
+  *encounterBtnAchiev7
+    name:Je vous demande de vous arrêter !
+    desc:Tu as cliqué <b>100 000 000</b> fois sur le patient.
+    icon:layers[7,1] core[1,0]
+    req:100000000 encounterButton:clicks
+
+
+  *encounterBtnAchiev8
+    name:Appelez-moi doigt d'adamantium
+    desc:Tu as cliqué <b>1 000 000 000</b> fois sur le patient.
+    icon:layers[8,0] layers[7,1] core[1,0]
+    req:1000000000 encounterButton:clicks
+
+
+  *revenueAchiev0
+    name:Le début du million...
+    desc:Tu as gagné <b>1</b> gold.
+    icon:layers[0,1] core[0,0]
+    req:1 gold:earned
+
+
+  *revenueAchiev1
+    name:Premier salaire
+    desc:Tu as gagné <b>1 000</b> gold.
+    icon:layers[1,1] core[0,0]
+    req:1000 gold:earned
+
+
+  *revenueAchiev2
+    name:Tu es à l'aise financièrement 🎶
+    desc:Tu as gagné <b>10 000</b> gold.
+    icon:layers[2,1] core[0,0]
+    req:10000 gold:earned
+
+
+  *revenueAchiev3
+    name:Le million !
+    desc:Tu as gagné <b>1 000 000</b> gold.
+    icon:layers[3,1] core[0,0]
+    req:1000000 gold:earned
+
+
+  *revenueAchiev4
+    name:Tu compte encore ?
+    desc:Tu as gagné <b>1 000 000 000</b> gold.
+    icon:layers[4,1] core[0,0]
+    req:1000000000 gold:earned
+
+
+  *revenueAchiev5
+    name:Gagnant du capitalisme
+    desc:Tu as gagné <b>1 000 000 000 000</b> gold.
+    icon:layers[5,1] core[0,0]
+    req:1000000000000 gold:earned
+
+
+  *revenueAchiev6
+    name:Midas
+    desc:Tu as gagné <b>1 000 000 000 000 000</b> gold.
+    icon:layers[6,1] core[0,0]
+    req:1000000000000000 gold:earned
+
+
+  *revenueAchiev7
+    name:Plus riche de la galaxie
+    desc:Tu as gagné <b>1 000 000 000 000 000 000</b> gold.
+    icon:layers[7,1] core[0,0]
+    req:1000000000000000000 gold:earned
+
+
+  *revenueAchiev8
+    name:Plus riche de l'Univers
+    desc:Tu as gagné <b>1 000 000 000 000 000 000 000</b> gold.
+    icon:layers[8,0] layers[7,1] core[0,0]
+    req:1000000000000000000000 gold:earned
