@@ -13,6 +13,7 @@ all: clean-all
 	cp -r styleguide dist/
 	cp -r assets dist/
 	cp -r games dist/
+	cp -r ressources dist/
 
 .PHONY: clean-all
 clean-all:
