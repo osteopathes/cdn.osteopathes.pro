@@ -21,3 +21,8 @@
 # inherit these settings.
 [context.deploy-preview]
   publish = "dist/"
+
+[[headers]]
+  for = "/assets/anatomy/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
